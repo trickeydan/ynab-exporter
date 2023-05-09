@@ -10,7 +10,6 @@ class Account(BaseModel):
     type: str  # TODO
     on_budget: bool
     closed: bool
-    note: str | None
     cleared_balance: int
     uncleared_balance: int
     last_reconciled_at: datetime
