@@ -71,41 +71,35 @@ def main() -> None:
                 budget.last_modified_on.timestamp()
             )
             for account in budget.accounts:
-                account_cleared_balance_g.labels(
-                    budget.id, budget.name, account.id, account.name, account.type
-                ).set(account.cleared_balance / 1000)
-                account_uncleared_balance_g.labels(
-                    budget.id, budget.name, account.id, account.name, account.type
-                ).set(account.uncleared_balance / 1000)
-                account_last_reconciled_g.labels(
-                    budget.id, budget.name, account.id, account.name, account.type
-                ).set(account.last_reconciled_at.timestamp())
+                labels = (
+                    budget.id,
+                    budget.name,
+                    account.id,
+                    account.name,
+                    account.type,
+                )
+                account_cleared_balance_g.labels(*labels).set(
+                    account.cleared_balance / 1000
+                )
+                account_uncleared_balance_g.labels(*labels).set(
+                    account.uncleared_balance / 1000
+                )
+                account_last_reconciled_g.labels(*labels).set(
+                    account.last_reconciled_at.timestamp()
+                )
 
             category_groups = client.get_categories(budget.id)
             for group in category_groups:
                 for category in group.categories:
-                    category_activity_g.labels(
+                    labels = (
                         budget.id,
                         budget.name,
                         group.id,
                         group.name,
                         category.id,
                         category.name,
-                    ).set(category.activity / 1000)
-                    category_balance_g.labels(
-                        budget.id,
-                        budget.name,
-                        group.id,
-                        group.name,
-                        category.id,
-                        category.name,
-                    ).set(category.balance / 1000)
-                    category_budgeted_g.labels(
-                        budget.id,
-                        budget.name,
-                        group.id,
-                        group.name,
-                        category.id,
-                        category.name,
-                    ).set(category.budgeted / 1000)
+                    )
+                    category_activity_g.labels(*labels).set(category.activity / 1000)
+                    category_balance_g.labels(*labels).set(category.balance / 1000)
+                    category_budgeted_g.labels(*labels).set(category.budgeted / 1000)
         sleep(60)
