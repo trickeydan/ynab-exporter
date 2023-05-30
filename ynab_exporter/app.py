@@ -48,17 +48,17 @@ def main() -> None:
     )
     category_activity_g = Gauge(
         "ynab_category_activity",
-        "Current . of the category",
+        "Current activity of the category",
         labelnames=CATEGORY_LABELS,
     )
     category_balance_g = Gauge(
         "ynab_category_balance",
-        "Current . of the category",
+        "Current balance of the category",
         labelnames=CATEGORY_LABELS,
     )
     category_budgeted_g = Gauge(
         "ynab_category_budgeted",
-        "Current . of the category",
+        "Current budgeted amount of the category",
         labelnames=CATEGORY_LABELS,
     )
 
