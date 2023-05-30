@@ -70,7 +70,7 @@ def main() -> None:
             budget_last_modified_g.labels(budget.id, budget.name).set(
                 budget.last_modified_on.timestamp()
             )
-            for account in budget.accounts:
+            for account in budget.active_accounts:
                 labels = (
                     budget.id,
                     budget.name,
@@ -84,9 +84,10 @@ def main() -> None:
                 account_uncleared_balance_g.labels(*labels).set(
                     account.uncleared_balance / 1000
                 )
-                account_last_reconciled_g.labels(*labels).set(
-                    account.last_reconciled_at.timestamp()
-                )
+                if account.last_reconciled_at is not None:
+                    account_last_reconciled_g.labels(*labels).set(
+                        account.last_reconciled_at.timestamp()
+                    )
 
             category_groups = client.get_categories(budget.id)
             for group in category_groups:

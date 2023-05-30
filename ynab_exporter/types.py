@@ -1,5 +1,6 @@
 from datetime import date, datetime
 from pydantic import BaseModel
+from typing import Optional
 
 from uuid import UUID
 
@@ -10,9 +11,10 @@ class Account(BaseModel):
     type: str  # TODO
     on_budget: bool
     closed: bool
+    deleted: bool
     cleared_balance: int
     uncleared_balance: int
-    last_reconciled_at: datetime
+    last_reconciled_at: Optional[datetime]
 
 
 class Budget(BaseModel):
@@ -22,6 +24,10 @@ class Budget(BaseModel):
     first_month: date
     last_month: date
     accounts: list[Account]
+
+    @property
+    def active_accounts(self):
+        return [account for account in self.accounts if not account.deleted]
 
 
 class Category(BaseModel):
